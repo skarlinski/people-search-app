@@ -8,29 +8,41 @@ import SearchBar from "./components/SearchBar";
 import HomePage from "./components/HomePage";
 import PeopleView from "./components/PeopleView";
 import People from "./data-models/People";
+import peopleData from './data/projectcontacts.json'
 
 export const App = () => {
   const [query, setQuery] = useState("");
-  const [people, setPeople] = useState([]);
+  const [people, setPeople] = useState(peopleData.map(
+    (person) =>
+      new People(
+        person.profile_picture,
+        person.first_name,
+        person.last_name,
+        person.id,
+        person.phone_number
+      )
+  ));
 
-  useEffect(() => {
-    const fetchPeople = async () => {
-      const result = await axios("./projectcontacts.json");
-      setPeople(
-        result.data.map(
-          (person) =>
-            new People(
-              person.profile_picture,
-              person.first_name,
-              person.last_name,
-              person.id,
-              person.phone_number
-            )
-        )
-      );
-    };
-    fetchPeople();
-  }, [query]);
+  // useEffect(() => {
+  //   const fetchPeople = async () => {
+  //     const result = await axios("./projectcontacts.json");
+  //     setPeople(
+  //       result.data.map(
+  //         (person) =>
+  //           new People(
+  //             person.profile_picture,
+  //             person.first_name,
+  //             person.last_name,
+  //             person.id,
+  //             person.phone_number
+  //           )
+  //       )
+  //     );
+  //   };
+  //   fetchPeople();
+  // }, [query]);
+
+
 
   const filterPeople = (q) => {
     console.log(q);
@@ -49,7 +61,7 @@ export const App = () => {
       <SearchBar
         getQuery={(e) => filterPeople(e)}
       />
-      {query ? <PeopleView people={query} /> : <PeopleView people={people} />}
+      {query? <PeopleView people={query} /> : <PeopleView people={people} />}
 
       {/* <HashRouter>
         <Switch>
